@@ -4,6 +4,11 @@ on: [push]
 jobs:
     build:
         runs-on: ubuntu-latest
+	env:
+	    working-directory: Chapter02
+	defaults:
+	    run:
+	        working-directory: ${{ env.working-directory }}
         strategy:
             matrix:
                 python-version: ["3.9", "3.10"]
@@ -11,7 +16,7 @@ jobs:
         steps:
         - uses: actions/checkout@v3
         - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@V4
+          uses: actions/setup-python@v4
           with: 
               python-version: ${{ matrix.python-version }}
         - name: Install depedencies
@@ -26,6 +31,6 @@ jobs:
               # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
               flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         - name: Test with pytest
-          run: pytest
-          working-directory: Chapter02
+          run: |
+              pytest
 
